@@ -69,7 +69,7 @@ function adicionarPaciente(event) {
                 <p><b>Imagem de perfil:</b></p>
                 <img src="${result.imagemUrl}" width="200">
                 <p>Deseja receber newsletters?<p>
-                <input type="checkbox" value="${result.nome}" checked>
+                <input type="checkbox" value="texto qualquer" onchange="alert('Olá, teste')" checked>
             `;
             const elementoSecao = document.querySelector("#msg_resultado");
             elementoSecao.appendChild(elementoResultado);
