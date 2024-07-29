@@ -38,6 +38,11 @@ export const criarPaciente = async (
 
     const sanitizarNome = (value) => value.replace(/[^a-zA-Z-à-ú\ s'-]/g, '');
 
+    let pacienteSanitizado = {
+      ...pacienteData,
+      nome: sanitizarNome(pacienteData.nome)
+    }
+
     let {
       cpf,
       nome,
@@ -51,7 +56,7 @@ export const criarPaciente = async (
       imagemUrl,
       imagem,
       historico
-    } = pacienteData
+    } = pacienteSanitizado
 
     if (!CPFValido(cpf)) {
       throw new AppError('CPF Inválido!')
