@@ -38,7 +38,8 @@ export const criaImagem = async (req: Request, res: Response): Promise<Response>
     console.log(req.file)
     const { originalname: nome, size: tamanho, filename: key, url = '' } = req.file
 
-    const acceptedMimeTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+    const acceptedMimeTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 20 * 1024 * 1024; //20MB
 
     const ext = extname(req.file.originalname).slice(1).toLocaleLowerCase();
     const mimeType = mime.lookup(ext);
@@ -50,7 +51,10 @@ export const criaImagem = async (req: Request, res: Response): Promise<Response>
     if (/\<script[\s\S]*?\>/.test(imageContent)) {
       return res.status(400).json({ error: 'Imagem contém scripts não permitidos!' });
     }
-
+    
+    if (tamanho > maxSize) {
+      return res.status(400).json({ error: 'Imagem excede o tamanho permitido!' });
+    }
 
     const imagem = new Imagem()
 
