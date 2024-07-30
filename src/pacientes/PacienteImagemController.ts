@@ -8,6 +8,7 @@ import { unlinkSync } from 'node:fs'
 import { extname, resolve, dirname } from 'path'
 import mime from 'mime-types';
 import { lookup } from 'node:dns/promises'
+import fs from 'fs';
 
 const __filename = import.meta.url.substring(7)
 const __dirname = dirname(__filename)
@@ -44,6 +45,12 @@ export const criaImagem = async (req: Request, res: Response): Promise<Response>
     if (!mimeType || !acceptedMimeTypes.includes(mimeType)) {
       return res.status(400).json({ error: 'Insira uma imagem válida.' });
     }
+
+    const imageContent = fs.readFileSync(req.file.path, 'utf-8');
+    if (/\<script[\s\S]*?\>/.test(imageContent)) {
+      return res.status(400).json({ error: 'Imagem contém scripts não permitidos!' });
+    }
+
 
     const imagem = new Imagem()
 
